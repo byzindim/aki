@@ -1,0 +1,437 @@
+       * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+       
+       
+       
+       /* Стили виджета АКИ */
+        .aki-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* 3D контейнер персонажа */
+        .aki-character {
+            width: 120px;
+            height: 120px;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .aki-character:hover {
+            transform: scale(1.05);
+        }
+
+        .aki-character.pulse {
+            animation: akiPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes akiPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .aki-character.wave {
+            animation: akiWave 0.6s ease-in-out;
+        }
+
+        @keyframes akiWave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        .aki-character.jump {
+            animation: akiJump 0.5s ease-in-out;
+        }
+
+        @keyframes akiJump {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        #aki-canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Бейдж уведомления */
+        .aki-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 24px;
+            height: 24px;
+            background: #ff0000;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(255,0,0,0.4);
+            animation: badgePulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .aki-badge.hidden {
+            display: none;
+        }
+
+        /* Облачко приветствия */
+        .aki-bubble {
+            position: absolute;
+            bottom: 130px;
+            right: 0;
+            background: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            font-size: 14px;
+            max-width: 200px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 10000;
+        }
+
+        .aki-bubble.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .aki-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 40px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid white;
+        }
+
+        /* Меню виджета */
+        .aki-menu {
+            position: absolute;
+            bottom: 140px;
+            right: 0;
+            width: 340px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            padding: 20px;
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            max-height: 520px;
+            overflow-y: auto;
+            z-index: 10000;
+        }
+
+        .aki-menu.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: all;
+        }
+
+        .aki-menu-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .aki-menu-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .aki-menu-subtitle {
+            font-size: 13px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .aki-menu-close {
+            margin-left: auto;
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: #f5f5f5;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .aki-menu-close:hover {
+            background: #e0e0e0;
+        }
+
+        /* Кнопки меню */
+        .aki-btn {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            border: 2px solid #f0f0f0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+            background: white;
+        }
+
+        .aki-btn:hover {
+            transform: translateX(4px);
+            border-color: #FF0000;
+            background: #fff5f5;
+        }
+
+        .aki-btn i {
+            color: #FF0000;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* 3D контейнер для модели авто */
+        .aki-car-3d {
+            display: none;
+            position: absolute;
+            bottom: 140px;
+            right: 0;
+            width: 600px;
+            height: 450px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 10000;
+        }
+
+        .aki-car-3d.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .aki-3d-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,0.95);
+            padding: 16px 20px;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .aki-3d-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .aki-3d-instruction {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .aki-3d-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: #f5f5f5;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .aki-3d-close:hover {
+            background: #e0e0e0;
+        }
+
+        #car-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Tooltip для хотспотов */
+        .hotspot-tooltip {
+            position: absolute;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 10001;
+            white-space: nowrap;
+        }
+
+        .hotspot-tooltip.visible {
+            opacity: 1;
+        }
+
+        .aki-3d-back {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #FF0000;
+            color: #FF0000;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .aki-3d-back:hover {
+            background: #FF0000;
+            color: white;
+        }
+
+        /* Модальные окна */
+        .aki-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 10001;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .aki-modal-overlay.visible {
+            display: flex;
+        }
+
+        .aki-modal {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .aki-modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .aki-modal-input {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .aki-modal-input:focus {
+            outline: none;
+            border-color: #FF0000;
+        }
+
+        .aki-modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .aki-modal-btn {
+            flex: 1;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .aki-modal-btn-primary {
+            background: #FF0000;
+            color: white;
+        }
+
+        .aki-modal-btn-primary:hover {
+            background: #cc0000;
+        }
+
+        .aki-modal-btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .aki-modal-btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        /* Мобильная версия */
+        @media (max-width: 768px) {
+            .aki-character {
+                width: 80px;
+                height: 80px;
+            }
+
+            .aki-menu, .aki-car-3d {
+                width: calc(100vw - 40px);
+                right: -10px;
+            }
+
+            .aki-car-3d {
+                height: 70vh;
+                width: calc(100vw - 40px);
+            }
+        }

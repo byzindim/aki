@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>highway77.ru - Виджет АКИ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="aki-widget.css">
+<script src="aki-widget.js" defer></script>
+</head>
+<body>
+
+    <!-- Виджет АКИ -->
+    <div class="aki-widget" id="akiWidget">
+        <!-- Облачко приветствия -->
+        <div class="aki-bubble" id="akiBubble">
+            Привет! Я АКИ 🤖<br>Помогу с запчастями
+        </div>
+
+        <!-- Меню -->
+        <div class="aki-menu" id="akiMenu">
+            <div class="aki-menu-header">
+                <div>
+                    <div class="aki-menu-title">Привет, я АКИ! 🤖</div>
+                    <div class="aki-menu-subtitle">Чем помочь?</div>
+                </div>
+                <button class="aki-menu-close" id="akiMenuClose">×</button>
+            </div>
+
+            <button class="aki-btn" onclick="showCar3D()">
+                <i class="fas fa-car"></i>
+                <span>Где болит машина?</span>
+            </button>
+
+            <button class="aki-btn" onclick="goToCatalog()">
+                <i class="fas fa-list"></i>
+                <span>Каталог запчастей</span>
+            </button>
+
+            <button class="aki-btn" onclick="goToNew()">
+                <i class="fas fa-fire"></i>
+                <span>Новые поступления</span>
+            </button>
+
+            <button class="aki-btn" onclick="showDiscountModal()">
+                <i class="fas fa-gift"></i>
+                <span>Получить скидку 15% на первый заказ</span>
+            </button>
+
+            <button class="aki-btn" onclick="showCallbackModal()">
+                <i class="fas fa-phone"></i>
+                <span>Заказать звонок</span>
+            </button>
+
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <button class="aki-btn" onclick="openWhatsApp()" style="flex: 1;">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </button>
+                <button class="aki-btn" onclick="openTelegram()" style="flex: 1;">
+                    <i class="fab fa-telegram"></i>
+                    <span>Telegram</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 3D модель авто с точками -->
+        <div class="aki-car-3d" id="akiCar3D">
+            <div class="aki-3d-header">
+                <div>
+                    <div class="aki-3d-title">Где болит машина?</div>
+                    <div class="aki-3d-instruction">Кликайте на красные точки для перехода в раздел</div>
+                </div>
+                <button class="aki-3d-close" onclick="hideCar3D()">×</button>
+            </div>
+            <canvas id="car-canvas"></canvas>
+            <button class="aki-3d-back" onclick="hideCar3D()">← Назад к меню</button>
+        </div>
+
+        <!-- 3D персонаж -->
+        <div class="aki-character pulse" id="akiCharacter">
+            <canvas id="aki-canvas"></canvas>
+            <div class="aki-badge" id="akiBadge">1</div>
+        </div>
+    </div>
+
+    <!-- Модальное окно скидки -->
+    <div class="aki-modal-overlay" id="discountModal">
+        <div class="aki-modal">
+            <div class="aki-modal-title">🎁 Получить скидку 15%</div>
+            <p style="margin-bottom: 16px; color: #666; font-size: 14px;">Оставьте свои данные и мы пришлём промокод на скидку 15% на первый заказ</p>
+            <input type="text" class="aki-modal-input" placeholder="Ваше имя" id="discountName">
+            <input type="tel" class="aki-modal-input" placeholder="Номер телефона" id="discountPhone">
+            <div class="aki-modal-buttons">
+                <button class="aki-modal-btn aki-modal-btn-secondary" onclick="closeDiscountModal()">Отмена</button>
+                <button class="aki-modal-btn aki-modal-btn-primary" onclick="submitDiscount()">Отправить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно обратного звонка -->
+    <div class="aki-modal-overlay" id="callbackModal">
+        <div class="aki-modal">
+            <div class="aki-modal-title">📞 Заказать звонок</div>
+            <p style="margin-bottom: 16px; color: #666; font-size: 14px;">Оставьте свои данные и мы перезвоним вам в ближайшее время</p>
+            <input type="text" class="aki-modal-input" placeholder="Ваше имя" id="callbackName">
+            <input type="tel" class="aki-modal-input" placeholder="Номер телефона" id="callbackPhone">
+            <div class="aki-modal-buttons">
+                <button class="aki-modal-btn aki-modal-btn-secondary" onclick="closeCallbackModal()">Отмена</button>
+                <button class="aki-modal-btn aki-modal-btn-primary" onclick="submitCallback()">Отправить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tooltip для хотспотов -->
+    <div class="hotspot-tooltip" id="hotspotTooltip"></div>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+</body>
+</html>
